@@ -1,0 +1,26 @@
+version: 2
+
+jobs:
+  build:
+    working_directory: .
+    docker:
+      - image: docker:17.05.0-ce-git
+    
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: run some tests
+          command: |
+            mocha
+      - run:
+          name: build image
+          command: |
+            docker build -t norrkin/pluralsight-docker-ci:$TAG .
+
+      - run:
+          name: push image
+          command: |
+            docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
+            docker push norrkin/pluralsight-docker-ci:$TAG
+
