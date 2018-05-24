@@ -8,14 +8,20 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
-      
+
       - run:
-          name: build image
+          name: "Build Image"
           command: |
             docker build -t norrkin/pluralsight-docker-ci .
 
       - run:
-          name: push image
+          name: "Test Image"
+          command: |
+            docker run -d --name my-app norrkin/pluralsight-docker-ci
+            docker exec my-app curl --retry 10 --retry-connrefused http://localhost:8080
+
+      - run:
+          name: "Push Image"
           command: |
             docker login -u $DOCKER_LOGIN -p $DOCKER_PASSWORD
             docker push norrkin/pluralsight-docker-ci
