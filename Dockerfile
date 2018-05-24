@@ -16,6 +16,6 @@ RUN cd /src && \
     npm config set registry http://registry.npmjs.org/ && \
     npm install
 
-#EXPOSE 8080
+EXPOSE 8080
 
 CMD cd /src && node ./app.js
